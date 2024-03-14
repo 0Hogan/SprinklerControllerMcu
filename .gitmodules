@@ -1,0 +1,3 @@
+[submodule "CommonMcuInterfaces"]
+	path = CommonMcuInterfaces
+	url = git@github.com:0Hogan/CommonMcuInterfaces.git

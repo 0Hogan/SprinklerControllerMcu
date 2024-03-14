@@ -1,6 +1,6 @@
 #include <vector>
 
-#include "../CommonHardwareInterfaces/Relay.h"
+#include "CommonMcuInterfaces/Relay.h"
 
 #ifndef SPRINKLER_SYSTEM_H
 #define SPRINKLER_SYSTEM_H
