@@ -8,7 +8,7 @@ class Job
   public:
     /**
      * @brief Construct a new Job object
-     * 
+     *
      * @param zone The zone that should be run.
      * @param duration_s How long the job should be run for (in seconds).
      */
@@ -16,7 +16,7 @@ class Job
 
     /**
      * @brief Sets the job duration.
-     * 
+     *
      * @param duration_s The job duration (in seconds).
      */
     void updateDuration(time_t duration_s) { m_duration_ms = duration_s * MS_PER_S; }
@@ -25,7 +25,7 @@ class Job
 
     /**
      * @brief Returns the job duration (in seconds).
-     * 
+     *
      * @return const time_t The job duration (in seconds).
      */
     const time_t getDuration_s() const { return m_duration_ms / MS_PER_S; }

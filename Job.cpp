@@ -2,7 +2,7 @@
 
 /**
  * @brief Starts execution of the job.
- * 
+ *
  */
 void Job::startJob()
 {
@@ -13,7 +13,7 @@ void Job::startJob()
 
 /**
  * @brief Pauses execution of the job (so that it can be resumed where it was at)
- * 
+ *
  */
 void Job::pauseJob()
 {
@@ -25,7 +25,7 @@ void Job::pauseJob()
 
 /**
  * @brief Stops execution of the job.
- * 
+ *
  */
 void Job::stopJob()
 {
@@ -36,7 +36,7 @@ void Job::stopJob()
 
 /**
  * @brief Completes the job.
- * 
+ *
  */
 void Job::completeJob()
 {

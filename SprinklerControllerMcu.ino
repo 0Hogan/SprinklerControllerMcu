@@ -21,9 +21,9 @@
  * Zone 4: House-Side of Street-side of Side Sidewalk
  * Zone 5: House-side of Side Sidewalk
  * Zone 6: Street-Side of Street-side of Side Sidewalk
- * Zone 7: 
- * Zone 8: 
- * Zone 9: 
+ * Zone 7:
+ * Zone 8:
+ * Zone 9:
 */
 static const uint8_t ZONE_PINS[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 static const uint8_t LED1_PIN = 12;
@@ -63,7 +63,7 @@ void setup()
     Serial.begin(115200);
     Logger::addOutputStream(&Serial);
     LOG_INFO("***** START OF DAY *****");
-    
+
     WiFi.begin(wifiSsid, wifiPassword);
 
     std::vector<Zone> zones;
@@ -73,7 +73,7 @@ void setup()
     }
 
     sprinklersCmdSub = std::make_shared<Mqtt::AdafruitSubscriber<Mqtt::SprinklersCmdMsg>>(&adafruitClient, SPRINKLERS_CMD_TOPIC_NAME);
-    sprinklersStatusPub = std::make_shared<Mqtt::AdafruitPublisher<Mqtt::SprinklersStatusMsg>>(&adafruitClient, SPRINKLERS_STATUS_TOPIC_NAME);    
+    sprinklersStatusPub = std::make_shared<Mqtt::AdafruitPublisher<Mqtt::SprinklersStatusMsg>>(&adafruitClient, SPRINKLERS_STATUS_TOPIC_NAME);
     sprinklerSystemControl = std::make_unique<SprinklerSystemControl>(zones, sprinklersStatusPub, sprinklersCmdSub);
     sprinklersCmdSub->subscribe(sprinklerCmdCallbackWrapper);
     adafruitClient.connect();

@@ -14,7 +14,7 @@ void SprinklerSystemControl::processJobs()
             return;
         }
         else
-        {        
+        {
             auto currentJob = m_jobs.front();
             currentJob.startJob();
             return;
@@ -28,7 +28,7 @@ void SprinklerSystemControl::processJobs()
             turnAllZonesOff();
             return;
         }
-        
+
         auto currentJob = m_jobs.front();
         if (currentJob.getZoneNumber() != currentlyRunningZone)
         {
@@ -58,9 +58,9 @@ void SprinklerSystemControl::processJobs()
 
 /**
  * @brief Adds a job to the queue.
- * 
+ *
  * @param zoneNumber The number of the zone to run.
- * 
+ *
  * @param duration_s The length of time (in seconds) for which the zone should be run.
 */
 void SprinklerSystemControl::enqueueZone(const uint8_t zoneNumber, const uint32_t duration_s)
@@ -79,7 +79,7 @@ void SprinklerSystemControl::enqueueZone(const uint8_t zoneNumber, const uint32_
 
 /**
  * @brief Removes all jobs queued for the given zone number.
- * 
+ *
  * @param zoneNumber The zone number to remove from the queue.
 */
 void SprinklerSystemControl::dequeueZone(const uint8_t zoneNumber)
@@ -95,7 +95,7 @@ void SprinklerSystemControl::dequeueZone(const uint8_t zoneNumber)
 
 /**
  * @brief Removes a job from the queue by its index.
- * 
+ *
  * @param index The index of the job to be removed from the queue.
 */
 void SprinklerSystemControl::dequeueElementByIndex(const uint8_t index)
@@ -106,7 +106,7 @@ void SprinklerSystemControl::dequeueElementByIndex(const uint8_t index)
 
 /**
  * @brief Turns off all other zones, and then turns on the given zone.
- * 
+ *
  * @param zoneNumber The zone number to turn on.
  */
 void SprinklerSystemControl::turnZoneOn(const uint8_t zoneNumber)
@@ -124,9 +124,9 @@ void SprinklerSystemControl::turnZoneOn(const uint8_t zoneNumber)
 
 /**
  * @brief Turns off the given zone.
- * 
+ *
  * @param zoneNumber The zone number to turn off.
- * 
+ *
  * @todo Make this function inline.
  */
 void SprinklerSystemControl::turnZoneOff(const uint8_t zoneNumber)
@@ -136,7 +136,7 @@ void SprinklerSystemControl::turnZoneOff(const uint8_t zoneNumber)
 
 /**
  * @brief Turns off all zones.
- * 
+ *
  */
 void SprinklerSystemControl::turnAllZonesOff()
 {
@@ -148,7 +148,7 @@ void SprinklerSystemControl::turnAllZonesOff()
 
 /**
  * @brief Returns which zone is currently turned on.
- * 
+ *
  * @return int The number for the zone currently turned on or -1 if none are on.
  */
 int SprinklerSystemControl::whichZoneIsOn() const

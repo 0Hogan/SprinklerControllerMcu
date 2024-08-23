@@ -6,7 +6,7 @@
 
 /**
  * @brief A Status Indicator to communicate the internal state of the software via some form of hardware.
- * 
+ *
  * @todo Make this a base class and build off of it for dual-LED status indicators.
  */
 class StatusIndicator

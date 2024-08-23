@@ -17,13 +17,13 @@
 
 /**
  * @brief A class to control which Sprinkler Zone is on (if any).
- * 
+ *
  */
 class SprinklerSystemControl
 {
 public:
     SprinklerSystemControl(std::vector<Zone> zones) : m_zones(zones) {}
-    SprinklerSystemControl(std::vector<Zone> zones, 
+    SprinklerSystemControl(std::vector<Zone> zones,
                            std::shared_ptr<Mqtt::Publisher<Mqtt::SprinklersStatusMsg>> sprinklersStatusPub,
                            std::shared_ptr<Mqtt::Subscriber<Mqtt::SprinklersCmdMsg>> sprinklersCmdSub)
                            : m_zones(zones), m_sprinklerStatusPub(sprinklersStatusPub), m_sprinklerCmdSub(sprinklersCmdSub)
@@ -32,9 +32,9 @@ public:
     void processJobs();
     /**
      * @brief Callback for to be executed whenever a Sprinkler Command message is received.
-     * 
-     * @param payload 
-     * @param payloadSize 
+     *
+     * @param payload
+     * @param payloadSize
      */
     void sprinklerCmdCallback(const char* payload, const uint16_t payloadSize);
 

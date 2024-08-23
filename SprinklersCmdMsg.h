@@ -16,12 +16,12 @@ namespace Mqtt
         {
             deserialize(payload, size);
         }
-        
+
         /**
          * @brief Get the Payload object
-         * 
-         * @return const char* 
-         * 
+         *
+         * @return const char*
+         *
          * @todo Need to implement this. It isn't needed yet, so laziness prevails.
          */
         const char* getPayload() const override {}
@@ -55,7 +55,7 @@ namespace Mqtt
                 command = Command::DeserializeError;
             }
         }
-        
+
         enum Command : uint8_t
         {
             MissingCommandError, ///< Indicates that a command was missing

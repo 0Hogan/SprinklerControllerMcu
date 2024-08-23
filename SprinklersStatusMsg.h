@@ -40,13 +40,13 @@ namespace Mqtt
 
             std::string payloadBuffer;
             serializeJson(doc, payloadBuffer);
-            
+
             return payloadBuffer.c_str();
         }
-        
+
         /******** MESSAGE DATA ********/
         std::deque<Job> jobs;
-        
+
     };
 }
 

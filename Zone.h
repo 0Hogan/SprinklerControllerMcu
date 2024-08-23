@@ -6,7 +6,7 @@
 
 /**
  * @brief Represents a Sprinkler Zone.
- * 
+ *
  */
 class Zone : public DigitalOutputPin
 {
