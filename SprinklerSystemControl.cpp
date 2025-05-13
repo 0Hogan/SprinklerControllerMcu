@@ -10,12 +10,12 @@ void SprinklerSystemControl::processJobs()
     {
         if (m_jobs.empty())
         {
-            // Nothing to do. The job queue is empty and nothings on.
+            // Nothing to do. The job queue is empty and nothing is on.
             return;
         }
         else
         {
-            auto currentJob = m_jobs.front();
+            auto& currentJob = m_jobs.front();
             currentJob.startJob();
             return;
         }
@@ -29,7 +29,7 @@ void SprinklerSystemControl::processJobs()
             return;
         }
 
-        auto currentJob = m_jobs.front();
+        auto& currentJob = m_jobs.front();
         if (currentJob.getZoneNumber() != currentlyRunningZone)
         {
             turnZoneOff(currentlyRunningZone);
@@ -43,9 +43,12 @@ void SprinklerSystemControl::processJobs()
             {
                 currentJob.completeJob();
                 m_jobs.pop_front();
-                currentJob = m_jobs.front();
-                currentJob.startJob();
-                return;
+
+                if (m_jobs.empty())
+                {
+                  LOG_INFO("Finished all queued jobs!");
+                  return;
+                }
             }
             else
             {
@@ -63,18 +66,25 @@ void SprinklerSystemControl::processJobs()
  *
  * @param duration_s The length of time (in seconds) for which the zone should be run.
 */
-void SprinklerSystemControl::enqueueZone(const uint8_t zoneNumber, const uint32_t duration_s)
+void SprinklerSystemControl::enqueueZone(const uint8_t zoneNumber, const uint64_t duration_s)
 {
+    if (duration_s == 0)
+    {
+        LOG_ERROR("Skipping job with duration_s=0!");
+        return;
+    }
+
     for (auto& zone : m_zones)
     {
         if (zone.getZoneNumber() == zoneNumber)
         {
-            m_jobs.push_back(Job(zone, duration_s));
+            m_jobs.push_back(Job(&zone, duration_s));
+            LOG_INFO("Enqueued a new job (Zone=%u; Duration = %llu)", zoneNumber, duration_s);
             return;
         }
     }
 
-    LOG_ERROR("Couldn't add the given job to the queue! (ZoneNumber=%u;Duration_s=%lu)", zoneNumber, duration_s);
+    LOG_ERROR("Couldn't find the specified zone number! (ZoneNumber=%u; Duration_s=%llu)", zoneNumber, duration_s);
 }
 
 /**
@@ -84,24 +94,30 @@ void SprinklerSystemControl::enqueueZone(const uint8_t zoneNumber, const uint32_
 */
 void SprinklerSystemControl::dequeueZone(const uint8_t zoneNumber)
 {
+    uint8_t jobsDequeued = 0;
     for (auto it = m_jobs.begin(); it != m_jobs.end(); ++it)
     {
         if (it->getZoneNumber() == zoneNumber)
         {
             m_jobs.erase(it);
+            jobsDequeued++;
         }
     }
+    LOG_INFO("Dequeued %u job(s) for zone #%u", jobsDequeued, zoneNumber);
 }
 
 /**
  * @brief Removes a job from the queue by its index.
  *
- * @param index The index of the job to be removed from the queue.
+ * @param index The index of the job to be removed from the queue.\
+ *
+ * @todo Provide details about the job in the log msg.
 */
 void SprinklerSystemControl::dequeueElementByIndex(const uint8_t index)
 {
     auto it = std::next(m_jobs.cbegin(), index);
     m_jobs.erase(it);
+    LOG_INFO("Dequeued job #%u.", index);
 }
 
 /**
@@ -111,6 +127,7 @@ void SprinklerSystemControl::dequeueElementByIndex(const uint8_t index)
  */
 void SprinklerSystemControl::turnZoneOn(const uint8_t zoneNumber)
 {
+    PAUSE_LOGGING();
     for (uint8_t i = 0; i < m_zones.size(); i++)
     {
         if (i == zoneNumber)
@@ -119,6 +136,8 @@ void SprinklerSystemControl::turnZoneOn(const uint8_t zoneNumber)
         }
         turnZoneOff(i);
     }
+    RESUME_LOGGING();
+    LOG_DEBUG("Turning Zone #%u on!", zoneNumber);
     m_zones[zoneNumber].on();
 }
 
@@ -131,6 +150,7 @@ void SprinklerSystemControl::turnZoneOn(const uint8_t zoneNumber)
  */
 void SprinklerSystemControl::turnZoneOff(const uint8_t zoneNumber)
 {
+    LOG_DEBUG("Turning Zone #%u off!", zoneNumber);
     m_zones[zoneNumber].off();
 }
 
@@ -140,10 +160,13 @@ void SprinklerSystemControl::turnZoneOff(const uint8_t zoneNumber)
  */
 void SprinklerSystemControl::turnAllZonesOff()
 {
+    LOG_DEBUG("Turning all zones off!");
+    PAUSE_LOGGING();
     for (int i = 0; i < m_zones.size(); i++)
     {
         m_zones[i].off();
     }
+    RESUME_LOGGING();
 }
 
 /**
@@ -157,7 +180,7 @@ int SprinklerSystemControl::whichZoneIsOn() const
     {
         if (m_zones[i].getState())
         {
-            return i;
+            return m_zones[i].getZoneNumber();
         }
     }
     return -1;
@@ -186,11 +209,14 @@ void SprinklerSystemControl::sprinklerCmdCallback(const char* payload, const uin
             break;
         case Mqtt::SprinklersCmdMsg::Command::PauseQueueExecution:
             /// @todo Need to implement pauseQueueExecution command.
+            LOG_ERROR("Tried to pause queue execution, but the logic hasn't been implemented yet!");
             break;
         case Mqtt::SprinklersCmdMsg::Command::ResumeQueueExecution:
             /// @todo Need to implement resumeQueueExecution command.
+            LOG_ERROR("Tried to resume queue execution, but the logic hasn't been implemented yet!");
             break;
         case Mqtt::SprinklersCmdMsg::Command::RequestQueueStatus:
+            LOG_INFO("Queue status was requested. Publishing now...");
             Mqtt::SprinklersStatusMsg statusMsg(m_jobs);
             m_sprinklerStatusPub->publish(statusMsg);
             break;

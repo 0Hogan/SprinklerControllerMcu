@@ -46,7 +46,7 @@ namespace Mqtt
 
             if (errorCode == DeserializationError::Ok)
             {
-                command = msg["Command"];
+                command = msg["Cmd"];
                 zoneNumber = msg["ZoneNumber"];
                 duration_s = msg["Duration_s"];
             }

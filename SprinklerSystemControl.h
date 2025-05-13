@@ -6,7 +6,7 @@
 #include <vector>
 
 #include <Client.h>
-#include <Log.h>
+#include <McuLogger.h>
 #include <Publisher.h>
 #include <Subscriber.h>
 
@@ -38,7 +38,7 @@ public:
      */
     void sprinklerCmdCallback(const char* payload, const uint16_t payloadSize);
 
-    void enqueueZone(const uint8_t zoneNumber, const uint32_t duration_s);
+    void enqueueZone(const uint8_t zoneNumber, const uint64_t duration_s);
     void dequeueZone(const uint8_t zoneNumber);
     void dequeueElementByIndex(const uint8_t index);
 

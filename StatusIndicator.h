@@ -1,6 +1,8 @@
 #ifndef STATUS_INDICATOR_H
 #define STATUS_INDICATOR_H
+
 #include <cstdint>
+#include <McuLogger.h>
 
 #include "McuHardwareInterfaces.h"
 
@@ -21,12 +23,14 @@ public:
 
     void refresh()
     {
+        PAUSE_LOGGING(); // We don't need to spam the logs with the status indicator changes.
         if (millis() - m_timeLastToggled_ms > TIME_BETWEEN_TOGGLES_MS)
         {
             m_led1.toggle();
             m_led2.toggle();
             m_timeLastToggled_ms = millis();
         }
+        RESUME_LOGGING();
     }
 
 private:
