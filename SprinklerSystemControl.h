@@ -40,7 +40,7 @@ public:
 
     void enqueueZone(const uint8_t zoneNumber, const uint64_t duration_s);
     void dequeueZone(const uint8_t zoneNumber);
-    void dequeueElementByIndex(const uint8_t index);
+    void dequeueJobByIndex(const uint8_t index);
 
     int whichZoneIsOn() const;
 

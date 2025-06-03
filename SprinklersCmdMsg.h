@@ -60,10 +60,10 @@ namespace Mqtt
         {
             MissingCommandError, ///< Indicates that a command was missing
             EnqueueJob, ///< Adds a job to the queue
-            DequeueJobByZone, ///< Removes a zone from the queue
+            DequeueJobByIndex, ///< Removes a job from the queue (using its index)
             PauseQueueExecution, ///< Pauses execution of the job queue
             ResumeQueueExecution, ///< Resumes execution of the job queue
-            CancelQueueExecution, ///< Cancels all jobs currently in the queue
+            StopQueueExecution, ///< Cancels all jobs currently in the queue
             RequestQueueStatus, ///< Requests the current status of the queue
             DeserializeError, ///< Indicates an error while deserializing the message
             InvalidCommandError, ///< Indicates that the specified command is invalid

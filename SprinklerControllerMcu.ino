@@ -81,7 +81,7 @@ void setup()
     std::vector<Zone> zones; ///< @todo This can probably be switched to a statically defined array rather than a vector - though it might be nice if adding/removing zones remotely...
     for (const auto &pin : ZONE_PINS)
     {
-        zones.push_back(Zone((zones.size() + 1), pin));
+        zones.push_back(Zone((zones.size() + 1), pin, true));
     }
 
     sprinklersCmdSub = std::make_shared<Mqtt::AdafruitSubscriber<Mqtt::SprinklersCmdMsg>>(&adafruitClient, SPRINKLERS_CMD_TOPIC_NAME);

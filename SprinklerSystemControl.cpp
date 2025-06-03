@@ -113,7 +113,7 @@ void SprinklerSystemControl::dequeueZone(const uint8_t zoneNumber)
  *
  * @todo Provide details about the job in the log msg.
 */
-void SprinklerSystemControl::dequeueElementByIndex(const uint8_t index)
+void SprinklerSystemControl::dequeueJobByIndex(const uint8_t index)
 {
     auto it = std::next(m_jobs.cbegin(), index);
     m_jobs.erase(it);
@@ -204,8 +204,8 @@ void SprinklerSystemControl::sprinklerCmdCallback(const char* payload, const uin
         case Mqtt::SprinklersCmdMsg::Command::EnqueueJob:
             enqueueZone(msg.zoneNumber, msg.duration_s);
             break;
-        case Mqtt::SprinklersCmdMsg::Command::DequeueJobByZone:
-            dequeueZone(msg.zoneNumber);
+        case Mqtt::SprinklersCmdMsg::Command::DequeueJobByIndex:
+            dequeueJobByIndex(msg.duration_s);
             break;
         case Mqtt::SprinklersCmdMsg::Command::PauseQueueExecution:
             /// @todo Need to implement pauseQueueExecution command.
