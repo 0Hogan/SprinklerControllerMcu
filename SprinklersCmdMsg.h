@@ -24,7 +24,7 @@ namespace Mqtt
          *
          * @todo Need to implement this. It isn't needed yet, so laziness prevails.
          */
-        const char* getPayload() const override {}
+        const std::string getPayload() const override {}
 
 
         const char* serialize()

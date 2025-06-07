@@ -1,6 +1,7 @@
 #ifndef SPRINKLER_JOB_H
 #define SPRINKLER_JOB_H
 
+#include <cstdint>
 #include <McuLogger.h>
 
 #include "Zone.h"
@@ -62,7 +63,7 @@ class Job
         return (endTime_ms - millis()) / MS_PER_S;
     }
 
-    const auto getZoneNumber() const { return m_zone->getZoneNumber(); }
+    const uint8_t getZoneNumber() const { return m_zone->getZoneNumber(); }
 
     void startJob();
     void pauseJob();

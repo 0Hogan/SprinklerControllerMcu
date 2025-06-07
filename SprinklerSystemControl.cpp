@@ -218,6 +218,7 @@ void SprinklerSystemControl::sprinklerCmdCallback(const char* payload, const uin
         case Mqtt::SprinklersCmdMsg::Command::RequestQueueStatus:
             LOG_INFO("Queue status was requested. Publishing now...");
             Mqtt::SprinklersStatusMsg statusMsg(m_jobs);
+            LOG_INFO("Payload: %s", statusMsg.serialize().c_str());
             m_sprinklerStatusPub->publish(statusMsg);
             break;
     }
