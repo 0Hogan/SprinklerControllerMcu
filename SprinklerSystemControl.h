@@ -50,7 +50,7 @@ private:
     void turnAllZonesOff();
 
     void onJobQueueModified();
-    void publishStatusMessage();
+    void publishStatusMessage() const;
     std::vector<Zone> m_zones;
     std::deque<Job> m_jobs;
 
