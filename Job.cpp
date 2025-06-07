@@ -1,5 +1,11 @@
 #include "Job.h"
 
+Job::~Job()
+{
+    m_zone->off();
+    LOG_DEBUG("Job for zone #%u destroyed.", getZoneNumber());
+}
+
 /**
  * @brief Starts execution of the job.
  *

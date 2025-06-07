@@ -22,6 +22,7 @@ class Job
      */
     Job(Zone* zone, time_t duration_s) : m_zone(zone), m_duration_ms(duration_s * MS_PER_S) {}
 
+    ~Job();
     /**
      * @brief Sets the job duration.
      *

@@ -203,23 +203,38 @@ void SprinklerSystemControl::sprinklerCmdCallback(const char* payload, const uin
             return;
         case Mqtt::SprinklersCmdMsg::Command::EnqueueJob:
             enqueueZone(msg.zoneNumber, msg.duration_s);
+            onJobQueueModified();
             break;
         case Mqtt::SprinklersCmdMsg::Command::DequeueJobByIndex:
             dequeueJobByIndex(msg.duration_s);
+            onJobQueueModified();
             break;
         case Mqtt::SprinklersCmdMsg::Command::PauseQueueExecution:
             /// @todo Need to implement pauseQueueExecution command.
             LOG_ERROR("Tried to pause queue execution, but the logic hasn't been implemented yet!");
+            onJobQueueModified();
             break;
         case Mqtt::SprinklersCmdMsg::Command::ResumeQueueExecution:
             /// @todo Need to implement resumeQueueExecution command.
             LOG_ERROR("Tried to resume queue execution, but the logic hasn't been implemented yet!");
+            onJobQueueModified();
             break;
         case Mqtt::SprinklersCmdMsg::Command::RequestQueueStatus:
             LOG_INFO("Queue status was requested. Publishing now...");
-            Mqtt::SprinklersStatusMsg statusMsg(m_jobs);
-            LOG_INFO("Payload: %s", statusMsg.serialize().c_str());
-            m_sprinklerStatusPub->publish(statusMsg);
+            publishStatusMessage();
             break;
     }
+}
+
+void SprinklerSystemControl::onJobQueueModified()
+{
+    LOG_DEBUG("Job queue modified! Publishing status message...");
+    publishStatusMessage();
+}
+
+void SprinklerSystemControl::publishStatusMessage() const
+{
+    Mqtt::SprinklersStatusMsg statusMsg(m_jobs);
+    LOG_INFO("Publishing job status: %s", statusMsg.serialize().c_str());
+    m_sprinklerStatusPub->publish(statusMsg);
 }

@@ -49,6 +49,8 @@ private:
     void turnZoneOff(const uint8_t zoneNumber);
     void turnAllZonesOff();
 
+    void onJobQueueModified();
+    void publishStatusMessage();
     std::vector<Zone> m_zones;
     std::deque<Job> m_jobs;
 
