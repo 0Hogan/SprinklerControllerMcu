@@ -20,7 +20,7 @@ class Job
      * @param zone The zone that should be run.
      * @param duration_s How long the job should be run for (in seconds).
      */
-    Job(Zone* zone, time_t duration_s) : m_zone(zone), m_duration_ms(duration_s * MS_PER_S) {}
+    Job(Zone* zone, time_t duration_s) : m_zone(zone), m_duration_ms(duration_s * MS_PER_S) { LOG_DEBUG("Created job (Zone #%u; Duration (s): %llu", zone->getZoneNumber(), duration_s); }
 
     ~Job();
     /**

@@ -2,7 +2,7 @@
 #define SPRINKLER_SYSTEM_H
 
 #include <cstdint>
-#include <deque>
+#include <list>
 #include <vector>
 
 #include <Client.h>
@@ -44,15 +44,16 @@ public:
 
     int whichZoneIsOn() const;
 
+    void publishStatusMessage() const;
+
 private:
     void turnZoneOn(const uint8_t zoneNumber);
     void turnZoneOff(const uint8_t zoneNumber);
     void turnAllZonesOff();
 
     void onJobQueueModified();
-    void publishStatusMessage() const;
     std::vector<Zone> m_zones;
-    std::deque<Job> m_jobs;
+    std::list<Job*> m_jobs;
 
     std::shared_ptr<Mqtt::Publisher<Mqtt::SprinklersStatusMsg>> m_sprinklerStatusPub = nullptr;
     std::shared_ptr<Mqtt::Subscriber<Mqtt::SprinklersCmdMsg>> m_sprinklerCmdSub = nullptr;

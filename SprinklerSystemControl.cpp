@@ -15,7 +15,7 @@ void SprinklerSystemControl::processJobs()
         }
         else
         {
-            auto& currentJob = m_jobs.front();
+            auto& currentJob = *(m_jobs.front());
             currentJob.startJob();
             return;
         }
@@ -29,7 +29,7 @@ void SprinklerSystemControl::processJobs()
             return;
         }
 
-        auto& currentJob = m_jobs.front();
+        auto& currentJob = *(m_jobs.front());
         if (currentJob.getZoneNumber() != currentlyRunningZone)
         {
             turnZoneOff(currentlyRunningZone);
@@ -42,7 +42,8 @@ void SprinklerSystemControl::processJobs()
             if (currentJob.isComplete())
             {
                 currentJob.completeJob();
-                m_jobs.pop_front();
+                delete *(m_jobs.begin());
+                m_jobs.erase(m_jobs.begin());
 
                 if (m_jobs.empty())
                 {
@@ -78,7 +79,7 @@ void SprinklerSystemControl::enqueueZone(const uint8_t zoneNumber, const uint64_
     {
         if (zone.getZoneNumber() == zoneNumber)
         {
-            m_jobs.push_back(Job(&zone, duration_s));
+            m_jobs.push_back(new Job(&zone, duration_s));
             LOG_INFO("Enqueued a new job (Zone=%u; Duration = %llu)", zoneNumber, duration_s);
             return;
         }
@@ -97,8 +98,9 @@ void SprinklerSystemControl::dequeueZone(const uint8_t zoneNumber)
     uint8_t jobsDequeued = 0;
     for (auto it = m_jobs.begin(); it != m_jobs.end(); ++it)
     {
-        if (it->getZoneNumber() == zoneNumber)
+        if ((*it)->getZoneNumber() == zoneNumber)
         {
+            delete *it;
             m_jobs.erase(it);
             jobsDequeued++;
         }
@@ -116,6 +118,7 @@ void SprinklerSystemControl::dequeueZone(const uint8_t zoneNumber)
 void SprinklerSystemControl::dequeueJobByIndex(const uint8_t index)
 {
     auto it = std::next(m_jobs.cbegin(), index);
+    delete *it;
     m_jobs.erase(it);
     LOG_INFO("Dequeued job #%u.", index);
 }

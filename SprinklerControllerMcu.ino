@@ -90,6 +90,7 @@ void setup()
     sprinklersCmdSub->subscribe(sprinklerCmdCallbackWrapper);
     MQTT_connect();
     LOG_INFO("Adafruit client connected!");
+    sprinklerSystemControl->publishStatusMessage();
 }
 
 void loop()

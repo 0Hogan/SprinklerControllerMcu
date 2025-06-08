@@ -1,7 +1,7 @@
 #ifndef SPRINKLERS_STATUS_MSG_H
 #define SPRINKLERS_STATUS_MSG_H
 
-#include <deque>
+#include <list>
 
 #include <ArduinoJson.h>
 #include <Message.h>
@@ -19,7 +19,7 @@ namespace Mqtt
             // setQos(1);
         }
 
-        SprinklersStatusMsg(const std::deque<Job> currentJobs) : Message(), jobs(currentJobs) {}
+        SprinklersStatusMsg(const std::list<Job*> currentJobs) : Message(), jobs(currentJobs) {}
 
         const std::string getPayload() const override
         {
@@ -29,13 +29,11 @@ namespace Mqtt
         const std::string serialize() const
         {
             JsonDocument doc;
-            // JsonArray jobs_json = doc["jobs"].to<JsonArray>();
             for (const auto& job : jobs)
             {
                 JsonObject job_json = doc.createNestedObject();
-                job_json["ZoneNumber"] = job.getZoneNumber();
-                job_json["Duration_s"] = job.getTimeRemaining_s();
-                // jobs_json.add(job_json);
+                job_json["ZoneNumber"] = job->getZoneNumber();
+                job_json["Duration_s"] = job->getTimeRemaining_s();
             }
 
             std::string payloadBuffer;
@@ -45,7 +43,7 @@ namespace Mqtt
         }
 
         /******** MESSAGE DATA ********/
-        std::deque<Job> jobs;
+        std::list<Job*> jobs;
 
     };
 }
